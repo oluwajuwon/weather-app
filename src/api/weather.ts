@@ -22,7 +22,9 @@ export const fetChCurrentLocationWeather = async (options: {
     const currentWeather = response.data;
 
     return currentWeather;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const fetchCityWeather = (city: string) => {
@@ -32,4 +34,24 @@ export const fetchCityWeather = (city: string) => {
   } catch (error) {}
 };
 
-export const fetchWeatherForecast = () => {};
+export const fetchWeatherForecast = async (options: {
+  lat: number;
+  lon: number;
+}) => {
+  const { lat, lon } = options;
+
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&units=metric&APPID=${API_KEY}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    const currentWeather = response.data;
+
+    return currentWeather;
+  } catch (error) {}
+};

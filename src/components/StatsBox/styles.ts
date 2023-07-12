@@ -37,7 +37,7 @@ export default () => {
       color: "#ffffff",
       fontWeight: "400",
       fontSize: 18,
-      marginBottom: 4
+      marginBottom: 4,
     },
     statsDescription: {
       color: "#ffffff",

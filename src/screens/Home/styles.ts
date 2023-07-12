@@ -19,9 +19,14 @@ export default () => {
     },
     location: {
       color: "#ffffff",
-      fontSize: 17,
-      fontFamily: "Outfit-Medium",
-      // marginTop: 16,
+      fontSize: 20,
+      fontFamily: "Outfit-Bold",
+    },
+    dateHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+      marginTop: 30,
     },
     statsRow: {
       flexDirection: "row",
@@ -30,7 +35,20 @@ export default () => {
     },
     statsImage: {
       height: 50,
-      width: 50
-    }
+      width: 50,
+    },
+    btn: {
+      backgroundColor: "#4795eb",
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 30,
+      position: "relative",
+    },
+    forecastTxt: {
+      color: "#ffffff",
+      textAlign: "center",
+      fontSize: 16,
+      fontWeight: "500",
+    },
   });
 };

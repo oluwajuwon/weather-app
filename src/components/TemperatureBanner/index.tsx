@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  View,
-  Text,
-  SafeAreaView,
-  Dimensions,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, Image, ViewStyle } from "react-native";
 import getStyles from "./styles";
 import { Temperature, Weather } from "../../types";
 import Cloudy from "../../assets/images/cloudy-transparent.png";
@@ -23,43 +12,62 @@ type TemperatureBannerProps = {
   temperature: Temperature;
   weather: Weather[];
   timeStamp: number;
+  type?: "small" | "normal";
+  extraDescription?: string;
+  containerStyles?: ViewStyle;
+  contentStyles?: ViewStyle;
 };
 
 const TemperatureBanner = ({
   temperature,
   weather,
   timeStamp,
+  type = "normal",
+  extraDescription,
+  containerStyles,
+  contentStyles,
 }: TemperatureBannerProps) => {
   const styles = getStyles();
-  const navigation = useNavigation();
+
+  const mainStyles = {
+    image: { small: styles.weatherImageSmall, normal: styles.weatherimage },
+    temp: { small: [styles.temp, styles.tempSmall], normal: styles.temp },
+    description: {
+      small: [styles.description, styles.descriptionSmall],
+      normal: styles.description,
+    },
+  };
 
   const renderWeatherImage = () => {
     const weatherConditions = weather[0].main;
     const date = new Date(timeStamp * 1000);
 
     if (weatherConditions === "Clear" && isDayTime(date)) {
-      return <Image source={Sunny} style={styles.weatherimage} />;
+      return <Image source={Sunny} style={mainStyles.image[type]} />;
     } else if (weatherConditions === "Clear" && !isDayTime(date)) {
-      return <Image source={Night} style={styles.weatherimage} />;
+      return <Image source={Night} style={mainStyles.image[type]} />;
     } else if (weatherConditions === "Clouds") {
-      return <Image source={Cloudy} style={styles.weatherimage} />;
+      return <Image source={Cloudy} style={mainStyles.image[type]} />;
     } else if (
       weatherConditions === "Rain" ||
       weatherConditions === "Drizzle"
     ) {
-      return <Image source={Rainy} style={styles.weatherimage} />;
+      return <Image source={Rainy} style={mainStyles.image[type]} />;
     }
   };
 
   return (
-    <View style={styles.tempDash}>
+    <View style={[styles.container, containerStyles]}>
       {renderWeatherImage()}
-      <View>
+      <View style={[styles.content, contentStyles]}>
         <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-          <Text style={styles.temp}>{temperature.temp}</Text>
+          <Text style={mainStyles.temp[type]}>{temperature.temp}</Text>
           <Text style={styles.tempunit}>°C</Text>
         </View>
-        <Text style={styles.description}>{weather[0].description}</Text>
+        <Text style={mainStyles.description[type]}>
+          {weather[0].description}
+          {extraDescription}
+        </Text>
       </View>
     </View>
   );

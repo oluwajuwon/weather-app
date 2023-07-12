@@ -3,25 +3,27 @@ import { StyleSheet } from "react-native";
 export default () => {
   return StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: "#111d3b",
-      paddingHorizontal: 24,
-      justifyContent: "center",
-    },
-    weatherimage: {
-      height: 150,
-      width: 150,
-    },
-    tempDash: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
       marginTop: 20,
     },
+    weatherimage: {
+      height: 150,
+      width: 150,
+    },
+    weatherImageSmall: {
+      height: 50,
+      width: 50,
+    },
+    content: {},
     temp: {
       fontSize: 65,
       fontFamily: "Outfit-Bold",
       color: "#b0bad3",
+    },
+    tempSmall: {
+      fontSize: 28,
     },
     tempunit: {
       fontFamily: "Outfit-Bold",
@@ -33,6 +35,9 @@ export default () => {
       fontFamily: "Outfit-Medium",
       fontSize: 16,
       textTransform: "capitalize",
+    },
+    descriptionSmall: {
+      fontSize: 12,
     },
   });
 };

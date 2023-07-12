@@ -11,71 +11,38 @@ import {
   RefreshControl,
   Image,
 } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 import getStyles from "./styles";
 import { useLocation } from "../../hooks/useLocation";
-import { fetChCurrentLocationWeather } from "../../api/weather";
 import TemperatureBanner from "../../components/TemperatureBanner";
-import { CurrentWeather } from "../../types";
+import { RootStackParamList } from "../../types";
 import WeatherStats from "../../components/WeatherStats";
 import Visibility from "../../assets/icons/visibility.png";
 import Thermometer from "../../assets/icons/thermometer.png";
 import Sun from "../../assets/images/sun.png";
 import Sunset from "../../assets/images/sunset.png";
-import {
-  convertMetersToMiles,
-  generateFeelsLikeDesc,
-  generateVisitbilityDesc,
-  getSunriseandSunsetTime,
-  getVisibilityInfo,
-} from "../../utils";
 import StatsBox from "../../components/StatsBox";
+import { useWeatherInfo } from "../../hooks/useWeatherInfo";
 
 const { width } = Dimensions.get("screen");
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, "Forecast">;
 
 const Home = () => {
   const styles = getStyles();
-  const [loading, setLoading] = useState(false);
   const { location } = useLocation();
-  const [currentWeatherInfo, setCurrentWeatherInfo] =
-    useState<CurrentWeather | null>();
 
-  const getWeatherInfo = async () => {
-    if (location && Object.keys(location).length > 0) {
-      setLoading(true);
-      const weatherinfo = await fetChCurrentLocationWeather({
-        lat: location?.coords.latitude,
-        lon: location?.coords.longitude,
-      });
-      setLoading(false);
-      setCurrentWeatherInfo(weatherinfo);
-    }
-  };
-
-  useEffect(() => {
-    getWeatherInfo();
-  }, [location]);
-
-  const handleRefresh = () => {};
-
-  console.log(currentWeatherInfo);
-
-  const { visibility, description } = currentWeatherInfo
-    ? getVisibilityInfo(currentWeatherInfo?.visibility)
-    : { visibility: "", description: "" };
-
-  const tempDesc = currentWeatherInfo
-    ? generateFeelsLikeDesc(
-        currentWeatherInfo?.main.feels_like,
-        currentWeatherInfo.dt
-      )
-    : "";
-
-  const { sunrise, sunset } = currentWeatherInfo
-    ? getSunriseandSunsetTime(
-        currentWeatherInfo.sys.sunrise,
-        currentWeatherInfo?.sys.sunset
-      )
-    : { sunrise: "", sunset: "" };
+  const {
+    currentWeatherInfo,
+    loading,
+    sunrise,
+    sunset,
+    tempDesc,
+    visibility,
+    description,
+    getWeatherInfo,
+  } = useWeatherInfo(location);
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -96,13 +63,28 @@ const Home = () => {
         {currentWeatherInfo && (
           <Fragment>
             <TemperatureBanner
-              weather={currentWeatherInfo.weather}
-              temperature={currentWeatherInfo.main}
-              timeStamp={currentWeatherInfo.dt}
+              weather={currentWeatherInfo?.weather}
+              temperature={currentWeatherInfo?.main}
+              timeStamp={currentWeatherInfo?.dt}
             />
+            <View style={styles.dateHeader}>
+              <Text style={[styles.date, { fontSize: 18, marginTop: 0 }]}>
+                Today
+              </Text>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() =>
+                  navigation.navigate("Forecast", {
+                    location,
+                  })
+                }
+              >
+                <Text style={styles.forecastTxt}>View 5 day Forecast</Text>
+              </TouchableOpacity>
+            </View>
             <WeatherStats
-              wind={currentWeatherInfo.wind}
-              temperature={currentWeatherInfo.main}
+              wind={currentWeatherInfo?.wind}
+              temperature={currentWeatherInfo?.main}
             />
           </Fragment>
         )}

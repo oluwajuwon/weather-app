@@ -45,7 +45,6 @@ export const useLocation = () => {
   };
 
   const handleLocationError = (error: GeoError) => {
-    console.log(error, "HHHH");
     setLocationLoading(false);
   };
 

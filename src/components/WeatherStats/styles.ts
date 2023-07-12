@@ -7,8 +7,10 @@ export default () => {
       justifyContent: "center",
       borderRadius: 20,
       flexDirection: "row",
-      marginTop: 30,
+      marginTop: 10,
       paddingVertical: 20,
+      // borderWidth: 1,
+      // borderColor: "#2a395e",
     },
     statBox: {
       alignItems: "center",
@@ -28,7 +30,6 @@ export default () => {
       color: "#b0bad3",
       fontSize: 13,
       fontWeight: "600",
-      fontFamily: "Outfit-SemiBold",
     },
   });
 };

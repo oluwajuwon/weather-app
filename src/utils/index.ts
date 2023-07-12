@@ -1,3 +1,7 @@
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar);
+
 export const isDayTime = (date: number | Date) => {
   const hours = new Date(date).getHours();
   const isDayTime = hours > 6 && hours < 20;
@@ -56,7 +60,9 @@ export const getTimeFromTimestamp = (timestamp: number) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  return `${hours.toString().padStart(2, "0")}:${minutes}`;
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
 };
 
 export const getSunriseandSunsetTime = (
@@ -67,4 +73,45 @@ export const getSunriseandSunsetTime = (
   const sunset = getTimeFromTimestamp(sunsetTime);
 
   return { sunrise, sunset };
+};
+
+export const convertToDateSections = (arr: any[]) => {
+  const dateObject = () => {
+    let dates = {};
+
+    for (let i = 0; i < arr.length; i++) {
+      dates = {
+        ...dates,
+        [`${arr[i].dt_txt.split(" ")[0]}`]: `${arr[i].dt_txt.split(" ")[0]}`,
+      };
+    }
+
+    return dates;
+  };
+
+  const sortDates = (a: Date | string, b: Date | string) => {
+    const lateDate = new Date(b).getTime();
+    const earlierDate = new Date(a).getTime();
+    return earlierDate - lateDate;
+  };
+
+  const sectionalizedData = Object.keys(dateObject())
+    .sort(sortDates)
+    .map((item) => ({
+      date: item,
+      data: [...arr].filter((obj) => obj.dt_txt.split(" ")[0] === item),
+    }));
+
+  return sectionalizedData;
+};
+
+export const getDatePeriodWithoutTime = (date: string) => {
+  return dayjs(date).calendar(null, {
+    sameDay: "[Today]",
+    nextDay: "[Tomorrow]",
+    nextWeek: "dddd",
+    lastDay: "[Yesterday]",
+    lastWeek: "dddd",
+    sameElse: "DD-MM-YYYY",
+  });
 };
