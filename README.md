@@ -39,10 +39,10 @@ yarn ios
 
 ## Screnshots of the app
 
-![IMG_2478](https://github.com/oluwajuwon/weather-app/assets/29441898/67c55408-7df8-4ca1-96a9-c9f732dc07f3 | width=100)
-![IMG_2477](https://github.com/oluwajuwon/weather-app/assets/29441898/15a608a5-d3df-48bf-86d0-9e7edfe5c441 | width=100)
-![IMG_2476](https://github.com/oluwajuwon/weather-app/assets/29441898/89df4e4e-a05a-4c76-82ae-b09754b4aea3 | width=100)
-![IMG_2475](https://github.com/oluwajuwon/weather-app/assets/29441898/65048270-a945-488d-b6d5-ed409607890a | width=100)
+![IMG_2478](https://github.com/oluwajuwon/weather-app/assets/29441898/67c55408-7df8-4ca1-96a9-c9f732dc07f3|width=100)
+![IMG_2477](https://github.com/oluwajuwon/weather-app/assets/29441898/15a608a5-d3df-48bf-86d0-9e7edfe5c441|width=100)
+![IMG_2476](https://github.com/oluwajuwon/weather-app/assets/29441898/89df4e4e-a05a-4c76-82ae-b09754b4aea3|width=100)
+![IMG_2475](https://github.com/oluwajuwon/weather-app/assets/29441898/65048270-a945-488d-b6d5-ed409607890a|width=100)
 
 if you have any questions or face any issue, please do not hesitate to send me an email.
 Thank you!
