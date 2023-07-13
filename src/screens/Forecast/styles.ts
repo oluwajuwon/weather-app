@@ -22,7 +22,7 @@ export default () => {
     },
     dateHeader: {
       color: "#7b8daf",
-      fontSize: 14,
+      fontSize: 15,
       fontFamily: "Outfit-Medium",
       paddingVertical: 5,
       backgroundColor: "#111d3b",

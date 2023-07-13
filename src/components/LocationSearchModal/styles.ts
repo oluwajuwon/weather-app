@@ -6,35 +6,21 @@ export default () => {
       flex: 1,
       backgroundColor: "#111d3b",
       paddingHorizontal: 24,
-    },
-    safeArea: {
-      backgroundColor: "#111d3b",
-      flex: 1,
-    },
-    date: {
-      color: "#7b8daf",
-      fontSize: 14,
-      fontFamily: "Outfit-Medium",
+      justifyContent: "center",
     },
     location: {
       color: "#ffffff",
-      fontSize: 20,
+      fontSize: 18,
       fontFamily: "Outfit-Bold",
+      marginTop: 10,
     },
-    dateHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-end",
-      marginTop: 30,
-    },
-    statsRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginTop: 30,
-    },
-    statsImage: {
-      height: 50,
-      width: 50,
+    mapsContainer: {
+      position: "absolute",
+      top: 80,
+      right: 0,
+      left: 0,
+      marginHorizontal: 24,
+      zIndex: 1,
     },
     btn: {
       backgroundColor: "#4795eb",
@@ -43,7 +29,7 @@ export default () => {
       borderRadius: 30,
       position: "relative",
     },
-    forecastTxt: {
+    saveTxt: {
       color: "#ffffff",
       textAlign: "center",
       fontSize: 16,

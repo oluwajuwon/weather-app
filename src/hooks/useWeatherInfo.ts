@@ -5,23 +5,30 @@ import {
   getVisibilityInfo,
 } from "../utils";
 import { CurrentWeather } from "../types";
-import { fetChCurrentLocationWeather } from "../api/weather";
+import { fetchCurrentLocationWeather } from "../api/weather";
 
 export const useWeatherInfo = (location: any) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<boolean | any>(false);
 
   const [currentWeatherInfo, setCurrentWeatherInfo] =
     useState<CurrentWeather | null>();
 
   const getWeatherInfo = async () => {
-    if (location && Object.keys(location).length > 0) {
-      setLoading(true);
-      const weatherinfo = await fetChCurrentLocationWeather({
-        lat: location?.coords.latitude,
-        lon: location?.coords.longitude,
-      });
+    try {
+      if (location && Object.keys(location).length > 0) {
+        setLoading(true);
+        setError(false);
+        const weatherinfo = await fetchCurrentLocationWeather({
+          lat: location?.lat,
+          lon: location?.lon,
+        });
+        setLoading(false);
+        setCurrentWeatherInfo(weatherinfo);
+      }
+    } catch (error: any) {
       setLoading(false);
-      setCurrentWeatherInfo(weatherinfo);
+      setError(error);
     }
   };
 
@@ -49,6 +56,7 @@ export const useWeatherInfo = (location: any) => {
 
   return {
     loading,
+    error,
     location,
     sunrise,
     sunset,

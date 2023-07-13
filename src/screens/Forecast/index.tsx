@@ -17,9 +17,10 @@ import {
 import { fetchWeatherForecast } from "../../api/weather";
 import { convertToDateSections, getDatePeriodWithoutTime } from "../../utils";
 import ForeCastItem from "../../components/ForecastItem";
+import { useApp } from "../../context/app-context";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type ForecastProps = {};
-type ForecastRouteProp = RouteProp<RootStackParamList, "Forecast">;
 
 const Forecast = ({ ...props }: ForecastProps) => {
   const styles = getStyles();
@@ -28,15 +29,14 @@ const Forecast = ({ ...props }: ForecastProps) => {
     useState<ForecastWeather | null>();
 
   const navigation = useNavigation();
-  const route = useRoute<ForecastRouteProp>();
-  const { location } = route.params;
+  const { userLocation: location } = useApp();
 
   const getWeatherForecast = async () => {
     if (location) {
       setLoading(true);
       const weatherinfo = await fetchWeatherForecast({
-        lat: location?.coords.latitude,
-        lon: location?.coords.longitude,
+        lat: location.lat,
+        lon: location?.lon,
       });
       setLoading(false);
       setWeatherForecastInfo(weatherinfo);
@@ -55,9 +55,18 @@ const Forecast = ({ ...props }: ForecastProps) => {
     getWeatherForecast();
   }, [location]);
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Header title="Forecast" navigation={navigation} hasBackBtn />
+      <Header
+        title="5-day Weather Forecast"
+        navigation={navigation}
+        hasBackBtn
+        containerStyles={{ height: 40 }}
+      />
       <View style={styles.cityContainer}>
         <Text style={styles.cityName}>
           {weatherForecastInfo?.city.name}, {weatherForecastInfo?.city.country}

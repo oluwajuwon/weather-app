@@ -1,9 +1,9 @@
 import { GeoPosition } from "react-native-geolocation-service";
 
 export type AppContextType = {
-  userLocation: GeoPosition;
+  userLocation: Coords;
   savedLocations: GeoPosition[] | [];
-  handleUpdateUserLocation: (position: GeoPosition) => void;
+  handleUpdateUserLocation: (position: Coords) => void;
 };
 
 export type Weather = {
@@ -40,11 +40,12 @@ export type LocationInfoMeta = {
   sunset: number;
 };
 
+export type Coords = {
+  lat: number;
+  lon: number;
+};
 export type CurrentWeather = {
-  coord: {
-    lon: number;
-    lat: number;
-  };
+  coord: Coords;
   weather: Weather[];
   base: string;
   main: Temperature;
@@ -92,4 +93,12 @@ export type ForecastWeather = {
 
 export type RootStackParamList = {
   Forecast: { location: GeoPosition | undefined };
+};
+
+export type SavedUserLocation = {
+  lat: number;
+  lon: number;
+  name: string;
+  country: string;
+  id: number | string;
 };

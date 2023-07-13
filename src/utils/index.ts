@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 dayjs.extend(calendar);
 
 export const isDayTime = (date: number | Date) => {
@@ -114,4 +115,36 @@ export const getDatePeriodWithoutTime = (date: string) => {
     lastWeek: "dddd",
     sameElse: "DD-MM-YYYY",
   });
+};
+
+export const storeDataInMemory = async (key: string, value: any) => {
+  try {
+    if (typeof value === "object") {
+      const jsonValue = JSON.stringify(value);
+      return await AsyncStorage.setItem(key, jsonValue);
+    }
+    await AsyncStorage.setItem(key, value);
+  } catch (e) {
+    // saving error
+  }
+};
+
+export const getDataFromMemory = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    console.log(value);
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // error reading value
+  }
+};
+
+export const removeDataFromMemory = async (key: string) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (e) {
+    // remove error
+  }
 };

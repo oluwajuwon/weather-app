@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { GeoPosition } from "react-native-geolocation-service";
-import { AppContextType } from "../types";
+import { AppContextType, Coords } from "../types";
 
 export const AppContext = React.createContext<AppContextType>({
   userLocation: {
-    coords: {
-      latitude: 0,
-      longitude: 0,
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-    },
-    timestamp: 0,
+    lat: 0,
+    lon: 0,
   },
   savedLocations: [],
   handleUpdateUserLocation(position) {},
@@ -23,20 +16,13 @@ type AppProviderProps = {
 };
 
 const AppProvider = ({ children }: AppProviderProps) => {
-  const [userLocation, setUserLocation] = useState<GeoPosition>({
-    coords: {
-      latitude: 0,
-      longitude: 0,
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-    },
-    timestamp: 0,
+  const [userLocation, setUserLocation] = useState<Coords>({
+    lat: 0,
+    lon: 0,
   });
   const [savedLocations, setSavedLocations] = useState<GeoPosition[]>([]);
 
-  const handleUpdateUserLocation = (location: GeoPosition) => {
+  const handleUpdateUserLocation = (location: Coords) => {
     setUserLocation(location);
   };
 

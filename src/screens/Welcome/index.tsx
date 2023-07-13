@@ -1,43 +1,65 @@
 import React, { useEffect, useState } from "react";
 import {
-  FlatList,
   View,
   Text,
   SafeAreaView,
-  Dimensions,
-  TextInput,
-  ScrollView,
   TouchableOpacity,
   Image,
 } from "react-native";
-import { CompositeNavigationProp } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import getStyles from "./styles";
 import Weather from "../../assets/images/rainy.jpg";
 import Arrow from "../../assets/icons/right-arrow.png";
 import { useLocation } from "../../hooks/useLocation";
 import { useApp } from "../../context/app-context";
+import SearchLocation from "../../components/LocationSearchModal";
+import { GeoPosition } from "react-native-geolocation-service";
+import { Coords } from "../../types";
 
 const Welcome = ({ ...props }) => {
   const styles = getStyles();
+  const [showModal, setShowModal] = useState(false);
+
   const { location } = useLocation();
   const { handleUpdateUserLocation } = useApp();
   const navigation = useNavigation();
-  console.log(location);
+
+  useEffect(() => {
+    if (location && Object.keys(location).length > 0) {
+      const coords = {
+        lat: location.coords.latitude,
+        lon: location.coords.longitude,
+      };
+      handleUpdateUserLocation(coords);
+    }
+  }, [location]);
+
+  const handleToggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   const handleNextScreen = () => {
     if (location) {
       navigation.navigate("Home" as never);
+    } else {
+      handleToggleModal();
     }
   };
 
-  useEffect(() => {
-    if (location && Object.keys(location).length > 0) {
-    }
-  }, [location]);
+  const handleLocationSelect = (location: Coords) => {
+    handleUpdateUserLocation(location);
+    handleToggleModal();
+    setTimeout(() => navigation.navigate("Home" as never), 100);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <SearchLocation
+        showSearchModal={showModal}
+        handleSelectLocation={handleLocationSelect}
+        onClose={handleToggleModal}
+        boxHeader="Enter your Location"
+      />
       <View style={styles.container}>
         <Image source={Weather} style={styles.welcomeImage} />
         <Text style={styles.title}>WedarApp</Text>

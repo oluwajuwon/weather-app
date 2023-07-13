@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import {
-  FlatList,
   View,
   Text,
   SafeAreaView,
-  Dimensions,
-  TextInput,
-  ScrollView,
   TouchableOpacity,
+  Image,
+  ActivityIndicator,
 } from "react-native";
 import getStyles from "./styles";
 
-const SearchLocation = () => {
+type LoadingScreenProps = {};
+const LoadingScreen = ({ ...props }: LoadingScreenProps) => {
   const styles = getStyles();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Text>search</Text>
+      <View style={styles.container}>
+        <ActivityIndicator color={"#ffffff"} />
+      </View>
     </SafeAreaView>
   );
 };
 
-export default SearchLocation;
+export default LoadingScreen;
