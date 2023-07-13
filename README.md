@@ -46,7 +46,7 @@ yarn android
 ### Alternatively
 You can open the folder in Xcode or android studio and run the project, with their play buttons and a selected simulator.
 
-run ```yarn start``` in yout terminal then run the app from android studio/xcode
+run ```yarn start``` in your terminal then run the app from android studio or xcode
 
 ```
 ```
