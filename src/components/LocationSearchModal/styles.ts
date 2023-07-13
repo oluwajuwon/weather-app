@@ -29,6 +29,9 @@ export default () => {
       borderRadius: 30,
       position: "relative",
     },
+    btnRed: {
+      backgroundColor: "#eb4757",
+    },
     saveTxt: {
       color: "#ffffff",
       textAlign: "center",

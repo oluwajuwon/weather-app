@@ -10,6 +10,7 @@ import WedarModal, { ModalTypes } from "../Modal";
 import { Coords, CurrentWeather } from "../../types";
 import TemperatureBanner from "../TemperatureBanner";
 import WeatherStats from "../WeatherStats";
+import { firstenv, secondenv, thirdenv } from "../../utils";
 
 type LocationSearchModalProps = {
   showSearchModal: boolean;
@@ -18,6 +19,8 @@ type LocationSearchModalProps = {
   boxHeader: string;
   searchedWeatherInfo?: CurrentWeather;
   saveLocation?: () => void;
+  removeLocation?: () => void;
+  isLocationSaved?: boolean;
 };
 
 const LocationSearchModal = ({
@@ -27,6 +30,8 @@ const LocationSearchModal = ({
   boxHeader,
   searchedWeatherInfo,
   saveLocation,
+  removeLocation,
+  isLocationSaved,
   ...props
 }: LocationSearchModalProps) => {
   const styles = getStyles();
@@ -66,7 +71,7 @@ const LocationSearchModal = ({
           onPress={handleLocationSelect}
           fetchDetails={true}
           query={{
-            key: "",
+            key: `${firstenv}${secondenv}${thirdenv}`,
             language: "en",
           }}
           textInputProps={{
@@ -86,9 +91,18 @@ const LocationSearchModal = ({
             <Text style={styles.location}>
               {searchedWeatherInfo?.name}, {searchedWeatherInfo?.sys.country}
             </Text>
-            <TouchableOpacity style={styles.btn} onPress={saveLocation}>
-              <Text style={styles.saveTxt}>Save Location</Text>
-            </TouchableOpacity>
+            {!isLocationSaved ? (
+              <TouchableOpacity style={styles.btn} onPress={saveLocation}>
+                <Text style={styles.saveTxt}>Save Location</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[styles.btn, styles.btnRed]}
+                onPress={removeLocation}
+              >
+                <Text style={styles.saveTxt}>Remove Location</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <TemperatureBanner
             weather={searchedWeatherInfo?.weather}

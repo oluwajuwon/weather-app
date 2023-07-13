@@ -8,6 +8,7 @@ export default () => {
       marginBottom: 20,
       paddingVertical: 25,
       paddingHorizontal: 10,
+      position: "relative",
     },
     boxContent: {
       flexDirection: "row",
@@ -29,13 +30,22 @@ export default () => {
     },
     minmaxTemp: {
       paddingLeft: 15,
-      width: "50%",
+      width: "45%",
     },
     bannerContainer: {
       marginTop: 0,
       justifyContent: "flex-start",
       paddingLeft: 10,
-      width: "50%",
+      width: "55%",
+    },
+    delete: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+    },
+    deleteImg: {
+      height: 20,
+      width: 20,
     },
   });
 };

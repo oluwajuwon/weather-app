@@ -1,20 +1,26 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import getStyles from "./styles";
 import { CurrentWeather } from "../../types";
 import TemperatureBanner from "../TemperatureBanner";
-import { getTimeFromTimestamp } from "../../utils";
+import Delete from "../../assets/icons/remove.png";
 
 type MyLocationItemProps = {
   weather: CurrentWeather;
+  onRemove: () => void;
 };
 
-const MyLocationItem = ({ weather, ...props }: MyLocationItemProps) => {
+const MyLocationItem = ({
+  weather,
+  onRemove,
+  ...props
+}: MyLocationItemProps) => {
   const styles = getStyles();
-
-  const timeStamp = useMemo(() => getTimeFromTimestamp(weather.dt), [weather]);
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onRemove} style={styles.delete}>
+        <Image source={Delete} style={styles.deleteImg} />
+      </TouchableOpacity>
       <View style={styles.boxContent}>
         <View style={styles.minmaxTemp}>
           <Text style={styles.cityName}>

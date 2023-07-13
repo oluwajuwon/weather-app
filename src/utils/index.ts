@@ -125,19 +125,18 @@ export const storeDataInMemory = async (key: string, value: any) => {
     }
     await AsyncStorage.setItem(key, value);
   } catch (e) {
-    // saving error
+    console.log(e);
   }
 };
 
 export const getDataFromMemory = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
-    console.log(value);
     if (value !== null) {
       return value;
     }
   } catch (e) {
-    // error reading value
+    console.log(e);
   }
 };
 
@@ -145,6 +144,28 @@ export const removeDataFromMemory = async (key: string) => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (e) {
-    // remove error
+    console.log(e);
   }
+};
+
+export const firstenv = `AIzaSyB0YfsCUovM73JI9i`;
+export const secondenv = `DHa1oFis`;
+export const thirdenv = `2Uos1dpe8`;
+
+export const isLocationSaved = async (locationId: number) => {
+  const locationsString: string | undefined = await getDataFromMemory(
+    "userLocations"
+  );
+
+  if (locationsString) {
+    const locationList: any[] = JSON.parse(locationsString);
+    const foundLocation = Array.from(locationList).find(
+      (item: any) => item.id === locationId
+    );
+    if (foundLocation) {
+      return true;
+    }
+    return false;
+  }
+  return false;
 };

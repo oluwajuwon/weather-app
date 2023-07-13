@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { GeoPosition } from "react-native-geolocation-service";
-import { AppContextType, Coords } from "../types";
+import {
+  AppContextType,
+  Coords,
+  CurrentWeather,
+  SavedUserLocation,
+} from "../types";
+import { getDataFromMemory, storeDataInMemory } from "../utils";
 
 export const AppContext = React.createContext<AppContextType>({
   userLocation: {
@@ -9,6 +15,8 @@ export const AppContext = React.createContext<AppContextType>({
   },
   savedLocations: [],
   handleUpdateUserLocation(position) {},
+  handleAddtoUserLocations(location) {},
+  handleRemoveUserLocation(location) {},
 });
 
 type AppProviderProps = {
@@ -20,23 +28,63 @@ const AppProvider = ({ children }: AppProviderProps) => {
     lat: 0,
     lon: 0,
   });
-  const [savedLocations, setSavedLocations] = useState<GeoPosition[]>([]);
+  const [savedLocations, setSavedLocations] = useState<SavedUserLocation[]>([]);
+
+  const getUserLocations = async () => {
+    const locationListString = await getDataFromMemory("userLocations");
+    if (locationListString) {
+      const locationList: SavedUserLocation[] = JSON.parse(locationListString);
+      setSavedLocations(locationList);
+    }
+  };
+
+  useEffect(() => {
+    getUserLocations();
+  }, []);
 
   const handleUpdateUserLocation = (location: Coords) => {
     setUserLocation(location);
   };
 
-  const handleUpdateSavedLocations = (location: GeoPosition) => {
-    const newSavedLocations = savedLocations;
-    setSavedLocations(newSavedLocations);
+  const handleAddtoUserLocations = async (location: CurrentWeather) => {
+    const toSavelocation = {
+      ...location?.coord,
+      name: location?.name,
+      country: location?.sys?.country,
+      id: location?.sys?.id,
+    };
+
+    if (savedLocations.length === 0 && location) {
+      setSavedLocations([toSavelocation]);
+      await storeDataInMemory("userLocations", [toSavelocation]);
+    }
+
+    if (location && savedLocations.length > 0) {
+      const locations = [...Array.from(savedLocations)];
+      locations.push(toSavelocation);
+      setSavedLocations(locations);
+      await storeDataInMemory("userLocations", locations);
+    }
   };
 
+  const handleRemoveUserLocation = async (location: CurrentWeather) => {
+    if (location && savedLocations.length !== 0) {
+      const filteredLocations = [...Array.from(savedLocations)].filter(
+        (item: SavedUserLocation) => item.id !== location?.sys.id
+      );
+
+      setSavedLocations(filteredLocations);
+      await storeDataInMemory("userLocations", filteredLocations);
+    }
+  };
   return (
     <AppContext.Provider
       value={{
         userLocation,
         savedLocations,
         handleUpdateUserLocation,
+        handleAddtoUserLocations,
+        handleRemoveUserLocation,
       }}
     >
       {children}

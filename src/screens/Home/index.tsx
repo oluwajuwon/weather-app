@@ -13,7 +13,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import getStyles from "./styles";
 import { useWeatherInfo } from "../../hooks/useWeatherInfo";
-import { Coords, CurrentWeather, RootStackParamList } from "../../types";
+import {
+  Coords,
+  CurrentWeather,
+  RootStackParamList,
+} from "../../types";
 import TemperatureBanner from "../../components/TemperatureBanner";
 import StatsBox from "../../components/StatsBox";
 import WeatherStats from "../../components/WeatherStats";
@@ -25,7 +29,6 @@ import Search from "../../assets/icons/search.png";
 import List from "../../assets/icons/list.png";
 import SearchLocation from "../../components/LocationSearchModal";
 import { fetchCurrentLocationWeather } from "../../api/weather";
-import { getDataFromMemory, storeDataInMemory } from "../../utils";
 import { useApp } from "../../context/app-context";
 import ErrorScreen from "../../components/ErrorScreen";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -38,7 +41,12 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [fetchedLocationWeather, setFetchedLocationWeather] =
     useState<CurrentWeather | null>();
-  const { userLocation: location } = useApp();
+  const {
+    userLocation: location,
+    savedLocations,
+    handleAddtoUserLocations,
+    handleRemoveUserLocation,
+  } = useApp();
 
   const {
     currentWeatherInfo,
@@ -69,8 +77,12 @@ const Home = () => {
   }
   const handleLocationSelect = async (data: Coords) => {
     const { lat, lon } = data;
-    const locationDetails = await fetchCurrentLocationWeather({ lat, lon });
-    setFetchedLocationWeather(locationDetails);
+    fetchCurrentLocationWeather({
+      lat,
+      lon,
+    }).then((locationDetails) => {
+      setFetchedLocationWeather(locationDetails);
+    });
   };
 
   const handleToggleModal = () => {
@@ -78,29 +90,20 @@ const Home = () => {
   };
 
   const handleSaveSearchedLocation = async () => {
-    const locationListString = await getDataFromMemory("userLocations");
-    const location = {
-      ...fetchedLocationWeather?.coord,
-      name: fetchedLocationWeather?.name,
-      country: fetchedLocationWeather?.sys?.country,
-      id: fetchedLocationWeather?.sys?.id,
-    };
-
-    if (!locationListString && fetchedLocationWeather) {
-      await storeDataInMemory("userLocations", [location]);
-    }
-    if (locationListString && fetchedLocationWeather) {
-      const locationList = JSON.parse(locationListString);
-      const foundLocation = Array.from(locationList).find(
-        (item: any) => item.id === fetchedLocationWeather.sys.id
-      );
-      if (foundLocation) {
-        return;
-      }
-      locationList.push(location);
-      await storeDataInMemory("userLocations", locationList);
-    }
+    if (fetchedLocationWeather)
+      await handleAddtoUserLocations(fetchedLocationWeather);
   };
+
+  const handleRemoveSearchedLocation = async () => {
+    if (fetchedLocationWeather)
+      await handleRemoveUserLocation(fetchedLocationWeather);
+  };
+
+  const isCurrentLocationSaved = fetchedLocationWeather
+    ? savedLocations
+        .map((item) => item.id)
+        .includes(fetchedLocationWeather?.sys.id)
+    : false;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -111,6 +114,8 @@ const Home = () => {
         boxHeader="Search Location"
         searchedWeatherInfo={fetchedLocationWeather!}
         saveLocation={handleSaveSearchedLocation}
+        removeLocation={handleRemoveSearchedLocation}
+        isLocationSaved={isCurrentLocationSaved}
       />
       <ScrollView
         style={styles.container}

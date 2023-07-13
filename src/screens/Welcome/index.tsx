@@ -13,7 +13,6 @@ import Arrow from "../../assets/icons/right-arrow.png";
 import { useLocation } from "../../hooks/useLocation";
 import { useApp } from "../../context/app-context";
 import SearchLocation from "../../components/LocationSearchModal";
-import { GeoPosition } from "react-native-geolocation-service";
 import { Coords } from "../../types";
 
 const Welcome = ({ ...props }) => {

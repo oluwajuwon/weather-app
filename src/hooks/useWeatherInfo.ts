@@ -19,12 +19,13 @@ export const useWeatherInfo = (location: any) => {
       if (location && Object.keys(location).length > 0) {
         setLoading(true);
         setError(false);
-        const weatherinfo = await fetchCurrentLocationWeather({
+        await fetchCurrentLocationWeather({
           lat: location?.lat,
           lon: location?.lon,
+        }).then((weatherinfo: any) => {
+          setLoading(false);
+          setCurrentWeatherInfo(weatherinfo);
         });
-        setLoading(false);
-        setCurrentWeatherInfo(weatherinfo);
       }
     } catch (error: any) {
       setLoading(false);

@@ -27,5 +27,16 @@ export default () => {
       paddingVertical: 5,
       backgroundColor: "#111d3b",
     },
+    emptyView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: 60,
+    },
+    emptyTxt: {
+      color: "#ffffff",
+      fontSize: 16,
+      fontFamily: "Outfit-Bold",
+    },
   });
 };

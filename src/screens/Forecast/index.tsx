@@ -8,12 +8,9 @@ import {
 } from "react-native";
 import getStyles from "./styles";
 import Header from "../../components/Header";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import {
-  CurrentWeather,
-  ForecastWeather,
-  RootStackParamList,
-} from "../../types";
+import { useNavigation } from "@react-navigation/native";
+import { useToast } from "react-native-toast-notifications";
+import { ForecastWeather } from "../../types";
 import { fetchWeatherForecast } from "../../api/weather";
 import { convertToDateSections, getDatePeriodWithoutTime } from "../../utils";
 import ForeCastItem from "../../components/ForecastItem";
@@ -30,16 +27,25 @@ const Forecast = ({ ...props }: ForecastProps) => {
 
   const navigation = useNavigation();
   const { userLocation: location } = useApp();
+  const toast = useToast();
 
   const getWeatherForecast = async () => {
     if (location) {
       setLoading(true);
-      const weatherinfo = await fetchWeatherForecast({
+      fetchWeatherForecast({
         lat: location.lat,
         lon: location?.lon,
-      });
-      setLoading(false);
-      setWeatherForecastInfo(weatherinfo);
+      })
+        .then((weatherinfo) => {
+          setLoading(false);
+          setWeatherForecastInfo(weatherinfo);
+        })
+        .catch((error) => {
+          setLoading(false);
+          toast.show(`Error fetching forecasts: ${error}`, {
+            type: "danger",
+          });
+        });
     }
   };
 
@@ -68,9 +74,12 @@ const Forecast = ({ ...props }: ForecastProps) => {
         containerStyles={{ height: 40 }}
       />
       <View style={styles.cityContainer}>
-        <Text style={styles.cityName}>
-          {weatherForecastInfo?.city.name}, {weatherForecastInfo?.city.country}
-        </Text>
+        {weatherForecastInfo && (
+          <Text style={styles.cityName}>
+            {weatherForecastInfo?.city.name},{" "}
+            {weatherForecastInfo?.city.country}
+          </Text>
+        )}
       </View>
       <SectionList
         style={styles.forecastList}
@@ -88,6 +97,11 @@ const Forecast = ({ ...props }: ForecastProps) => {
             onRefresh={getWeatherForecast}
             tintColor="#b0bad3"
           />
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyView}>
+            <Text style={styles.emptyTxt}>No data</Text>
+          </View>
         }
       />
     </SafeAreaView>

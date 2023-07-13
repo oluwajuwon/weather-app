@@ -2,8 +2,10 @@ import { GeoPosition } from "react-native-geolocation-service";
 
 export type AppContextType = {
   userLocation: Coords;
-  savedLocations: GeoPosition[] | [];
+  savedLocations: SavedUserLocation[] | [];
   handleUpdateUserLocation: (position: Coords) => void;
+  handleAddtoUserLocations: (location: CurrentWeather) => void;
+  handleRemoveUserLocation: (location: CurrentWeather) => void;
 };
 
 export type Weather = {
@@ -100,5 +102,5 @@ export type SavedUserLocation = {
   lon: number;
   name: string;
   country: string;
-  id: number | string;
+  id: number;
 };
